@@ -32,6 +32,7 @@ What is implemented:
 - local-only documentation
 - a real tiny LoRA example artifact produced in WSL at `artifacts/tiny-gpt2-lora/`
 - a realistic TinyLlama base-model path for a Codex-servable local adapter workflow
+- a smaller DistilGPT2 CPU-friendly LoRA demo path for faster local validation
 
 What still depends on your machine when you run it:
 
@@ -139,6 +140,20 @@ Expected result:
 - the command should run successfully and produce text
 - the text quality will be poor because `sshleifer/tiny-gpt2` is only a CPU-safe mechanics demo, not a useful production model
 
+### 3b. Run the Faster DistilGPT2 Example
+
+For a larger but still CPU-friendlier demo than `tiny-gpt2`, use the local DistilGPT2 path:
+
+```bash
+cd /mnt/c/Users/ManishKL/Documents/Playground/codex-private-airgap-lab
+source ~/codex-airgap-venv/bin/activate
+bash wsl/run_distilgpt2_example.sh
+```
+
+Output:
+
+- `artifacts/distilgpt2-copilot-sre-lora/`
+
 ### 4. Package for Ollama
 
 Use the model artifact from `artifacts/` and adapt the Modelfile template in:
@@ -188,6 +203,12 @@ That path is intended for:
 3. launching Codex against the resulting local model with `--oss -m ...`
 
 This is the right serving shape for a real local Codex workflow. The constraint on this machine is CPU runtime, not repository setup.
+
+TinyLlama explanation:
+
+- TinyLlama is a 1.1B chat model and is much closer to a real Ollama/Codex local serving target than `tiny-gpt2`
+- that makes it more realistic, but also much slower on CPU-only WSL
+- the repo keeps TinyLlama as the realistic path and DistilGPT2 as the faster validation path
 
 ## Airgap and Security Notes
 

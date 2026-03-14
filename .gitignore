@@ -9,6 +9,9 @@ artifacts/
 artifacts/**/checkpoint-*/
 artifacts/tinyllama-base/
 artifacts/tinyllama-copilot-sre-lora/
+artifacts/distilgpt2-base/
+artifacts/distilgpt2-copilot-sre-lora/
+artifacts/*.log
 
 # Editors and OS files
 .DS_Store

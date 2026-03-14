@@ -39,6 +39,7 @@ def main() -> None:
     args = parse_args()
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
+    model_path = Path(args.model)
 
     dataset = load_dataset(
         "json",
@@ -63,7 +64,13 @@ def main() -> None:
 
     tokenized = dataset.map(tokenize, batched=False)
 
-    model = AutoModelForCausalLM.from_pretrained(args.model)
+    from_tf = False
+    if model_path.exists():
+        has_pt = any((model_path / name).exists() for name in ("pytorch_model.bin", "model.safetensors"))
+        has_tf = (model_path / "tf_model.h5").exists()
+        from_tf = has_tf and not has_pt
+
+    model = AutoModelForCausalLM.from_pretrained(args.model, from_tf=from_tf)
     module_names = {name for name, _ in model.named_modules()}
     if any(name.endswith("q_proj") for name in module_names):
         target_modules = ["q_proj", "v_proj"]
