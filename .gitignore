@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Training outputs
+artifacts/
+
+# Editors and OS files
+.DS_Store
+Thumbs.db
+

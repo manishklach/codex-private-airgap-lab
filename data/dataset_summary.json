@@ -1,0 +1,11 @@
+{
+  "source_files": [
+    "form1_india_draft.md",
+    "playground_README.md",
+    "supportforcrohns_mirror.py",
+    "supportforcrohns_repair.py"
+  ],
+  "train_examples": 7,
+  "valid_examples": 1,
+  "test_examples": 2
+}

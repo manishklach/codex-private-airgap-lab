@@ -1,0 +1,15 @@
+FROM mistral:latest
+
+# Replace this with the adapter or merged model packaging flow you choose.
+# This template is intentionally conservative because the exact import path
+# depends on how your LoRA result is exported.
+
+SYSTEM """
+You are a local-only coding and document assistant for a private workspace.
+Stay grounded in the provided files and do not claim access to anything outside
+the local environment.
+"""
+
+PARAMETER temperature 0.2
+PARAMETER num_ctx 8192
+
