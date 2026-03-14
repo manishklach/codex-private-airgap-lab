@@ -166,6 +166,32 @@ PowerShell -ExecutionPolicy Bypass -File .\scripts\start_distilgpt2_training.ps1
 PowerShell -ExecutionPolicy Bypass -File .\scripts\check_distilgpt2_training.ps1
 ```
 
+### 3c. Open a Local Browser UI for DistilGPT2
+
+Install `gradio` in the WSL training environment if needed:
+
+```bash
+source ~/codex-airgap-venv/bin/activate
+pip install gradio
+```
+
+Then launch the UI:
+
+```bash
+cd /mnt/c/Users/ManishKL/Documents/Playground/codex-private-airgap-lab
+source ~/codex-airgap-venv/bin/activate
+bash wsl/run_distilgpt2_ui.sh
+```
+
+Open:
+
+- `http://127.0.0.1:7860`
+
+Files used by the UI:
+
+- `artifacts/distilgpt2-base/`
+- `artifacts/distilgpt2-copilot-sre-lora/`
+
 ### 4. Package for Ollama
 
 Use the model artifact from `artifacts/` and adapt the Modelfile template in:
