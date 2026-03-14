@@ -1,11 +1,12 @@
 {
   "source_files": [
-    "form1_india_draft.md",
-    "playground_README.md",
-    "supportforcrohns_mirror.py",
-    "supportforcrohns_repair.py"
+    "analysis.py",
+    "copilot_sre_ARCHITECTURE.md",
+    "copilot_sre_README.md",
+    "prompt_builder.py",
+    "web.py"
   ],
-  "train_examples": 7,
-  "valid_examples": 1,
+  "train_examples": 9,
+  "valid_examples": 2,
   "test_examples": 2
 }

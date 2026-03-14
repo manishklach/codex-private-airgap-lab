@@ -12,7 +12,7 @@ This repository packages a practical Windows PowerShell + WSL Ubuntu workflow fo
 This repo is intentionally self-contained. It includes:
 
 - documentation for Mac and Windows local-only workflows
-- sample source files copied from the `Playground` workspace
+- sample source files copied from the local `copilot-sre` repository
 - a dataset builder that converts those files into `train/valid/test` JSONL
 - a WSL training script for a local LoRA run
 - PowerShell helpers to validate the local stack and launch Codex
@@ -42,7 +42,7 @@ What still depends on your machine when you run it:
 ## Repository Layout
 
 - `docs/` - Mac and Windows guides in Markdown and HTML
-- `samples/source/` - sample files copied from the local `Playground` directory
+- `samples/source/` - sample files copied from the local `copilot-sre` repository
 - `data/` - generated fine-tuning dataset
 - `scripts/` - PowerShell and Python helpers
 - `wsl/` - WSL Ubuntu training assets
@@ -50,12 +50,13 @@ What still depends on your machine when you run it:
 
 ## Sample Source Files
 
-The sample corpus in this repo was copied from local files in `Playground`:
+The sample corpus in this repo was copied from the local `copilot-sre` repository:
 
-- `README.md`
-- `form1_india_draft.md`
-- `supportforcrohns_mirror.py`
-- `supportforcrohns_repair.py`
+- `copilot-sre/README.md`
+- `copilot-sre/docs/ARCHITECTURE.md`
+- `copilot-sre/copilot_sre/analysis.py`
+- `copilot-sre/copilot_sre/prompt_builder.py`
+- `copilot-sre/copilot_sre/web.py`
 
 These are used to generate a toy fine-tuning dataset so the repository has a concrete end-to-end path.
 
@@ -129,7 +130,7 @@ To run a quick inference using that adapter:
 python wsl/infer_lora.py \
   --model sshleifer/tiny-gpt2 \
   --adapter /mnt/c/Users/ManishKL/Documents/Playground/codex-private-airgap-lab/artifacts/tiny-gpt2-lora \
-  --prompt "Summarize the private sample workspace."
+  --prompt "Summarize the copilot-sre sample workspace."
 ```
 
 Expected result:
@@ -155,13 +156,13 @@ ollama run codex-airgap-demo
 ### 6. Launch Codex Against the Local Model
 
 ```powershell
-.\scripts\launch_codex_ollama.ps1 -Model codex-airgap-demo -Workspace C:\Users\ManishKL\Documents\Playground
+.\scripts\launch_codex_ollama.ps1 -Model codex-airgap-demo -Workspace C:\Users\ManishKL\Documents\Playground\copilot-sre
 ```
 
 Equivalent raw command:
 
 ```powershell
-codex --oss --local-provider ollama -m codex-airgap-demo -C C:\Users\ManishKL\Documents\Playground --sandbox workspace-write --ask-for-approval on-request
+codex --oss --local-provider ollama -m codex-airgap-demo -C C:\Users\ManishKL\Documents\Playground\copilot-sre --sandbox workspace-write --ask-for-approval on-request
 ```
 
 Note:
