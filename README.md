@@ -31,6 +31,7 @@ What is implemented:
 - PowerShell launch helpers for Codex and Ollama
 - local-only documentation
 - a real tiny LoRA example artifact produced in WSL at `artifacts/tiny-gpt2-lora/`
+- a realistic TinyLlama base-model path for a Codex-servable local adapter workflow
 
 What still depends on your machine when you run it:
 
@@ -143,6 +144,7 @@ Expected result:
 Use the model artifact from `artifacts/` and adapt the Modelfile template in:
 
 - `ollama/Modelfile.template`
+- `ollama/Modelfile.tinyllama.adapter.template`
 
 ### 5. Serve with Ollama
 
@@ -170,6 +172,22 @@ Note:
 - the included `tiny-gpt2` LoRA artifact is a real fine-tuning example
 - the locally served Ollama model alias in this repo is still based on `mistral:latest`
 - to connect Codex to a LoRA-adapted model, you still need to package a compatible trained model for Ollama or LM Studio
+
+## TinyLlama Path
+
+For a more realistic local model path, the repo now includes:
+
+- base model directory: `artifacts/tinyllama-base/`
+- WSL runner: `wsl/run_tinyllama_example.sh`
+- Ollama adapter template: `ollama/Modelfile.tinyllama.adapter.template`
+
+That path is intended for:
+
+1. running LoRA against a small Llama-family instruct model
+2. packaging the adapter for Ollama with an `ADAPTER` Modelfile
+3. launching Codex against the resulting local model with `--oss -m ...`
+
+This is the right serving shape for a real local Codex workflow. The constraint on this machine is CPU runtime, not repository setup.
 
 ## Airgap and Security Notes
 

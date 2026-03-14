@@ -1,0 +1,12 @@
+FROM ./artifacts/tinyllama-base
+ADAPTER ./artifacts/tinyllama-copilot-sre-lora
+
+SYSTEM """
+You are a local-only coding and SRE assistant tuned on a small subset of the
+copilot-sre repository. Stay grounded in the local workspace and avoid claims
+about files or systems that are not present in the local environment.
+"""
+
+PARAMETER temperature 0.2
+PARAMETER num_ctx 4096
+

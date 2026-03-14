@@ -23,6 +23,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", required=True, help="Directory for LoRA artifacts")
     parser.add_argument("--max-length", type=int, default=1024)
     parser.add_argument("--epochs", type=int, default=1)
+    parser.add_argument("--max-steps", type=int, default=-1)
     return parser.parse_args()
 
 
@@ -88,6 +89,7 @@ def main() -> None:
     training_args = TrainingArguments(
         output_dir=str(output_dir),
         num_train_epochs=args.epochs,
+        max_steps=args.max_steps,
         per_device_train_batch_size=1,
         per_device_eval_batch_size=1,
         gradient_accumulation_steps=4,
