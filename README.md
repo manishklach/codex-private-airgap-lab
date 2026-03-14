@@ -101,6 +101,11 @@ This writes:
 
 ### 3. Train in WSL Ubuntu
 
+Recommended default:
+
+- use the DistilGPT2 path first for a fast local LoRA validation
+- use TinyLlama later if you want a more realistic Ollama/Codex target
+
 Inside WSL:
 
 ```bash
@@ -153,6 +158,13 @@ bash wsl/run_distilgpt2_example.sh
 Output:
 
 - `artifacts/distilgpt2-copilot-sre-lora/`
+
+Windows helpers:
+
+```powershell
+PowerShell -ExecutionPolicy Bypass -File .\scripts\start_distilgpt2_training.ps1
+PowerShell -ExecutionPolicy Bypass -File .\scripts\check_distilgpt2_training.ps1
+```
 
 ### 4. Package for Ollama
 
