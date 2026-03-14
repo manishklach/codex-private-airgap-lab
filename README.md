@@ -30,11 +30,12 @@ What is implemented:
 - WSL training script scaffold using Transformers + PEFT LoRA
 - PowerShell launch helpers for Codex and Ollama
 - local-only documentation
+- a real tiny LoRA example artifact produced in WSL at `artifacts/tiny-gpt2-lora/`
 
 What still depends on your machine when you run it:
 
-- downloading or mounting the base model in WSL
-- running the LoRA training job
+- downloading or mounting the base model in WSL for anything beyond the included tiny example
+- running a LoRA training job for a model you actually want to serve in Codex
 - exporting or packaging the trained result for Ollama
 - serving that trained model locally
 
@@ -106,6 +107,36 @@ bash wsl/run_train.sh /path/to/local-or-cached-model
 
 This uses the local dataset and runs a LoRA job with the training script in `wsl/train_lora.py`.
 
+### 3a. Run the Included Tiny LoRA Example
+
+This repo already includes a completed tiny CPU-safe LoRA example using `sshleifer/tiny-gpt2`.
+
+To reproduce it:
+
+```bash
+cd /mnt/c/Users/ManishKL/Documents/Playground/codex-private-airgap-lab
+source ~/codex-airgap-venv/bin/activate
+bash wsl/run_tiny_example.sh
+```
+
+This produces the adapter in:
+
+- `artifacts/tiny-gpt2-lora/`
+
+To run a quick inference using that adapter:
+
+```bash
+python wsl/infer_lora.py \
+  --model sshleifer/tiny-gpt2 \
+  --adapter /mnt/c/Users/ManishKL/Documents/Playground/codex-private-airgap-lab/artifacts/tiny-gpt2-lora \
+  --prompt "Summarize the private sample workspace."
+```
+
+Expected result:
+
+- the command should run successfully and produce text
+- the text quality will be poor because `sshleifer/tiny-gpt2` is only a CPU-safe mechanics demo, not a useful production model
+
 ### 4. Package for Ollama
 
 Use the model artifact from `artifacts/` and adapt the Modelfile template in:
@@ -132,6 +163,12 @@ Equivalent raw command:
 ```powershell
 codex --oss --local-provider ollama -m codex-airgap-demo -C C:\Users\ManishKL\Documents\Playground --sandbox workspace-write --ask-for-approval on-request
 ```
+
+Note:
+
+- the included `tiny-gpt2` LoRA artifact is a real fine-tuning example
+- the locally served Ollama model alias in this repo is still based on `mistral:latest`
+- to connect Codex to a LoRA-adapted model, you still need to package a compatible trained model for Ollama or LM Studio
 
 ## Airgap and Security Notes
 
@@ -172,3 +209,13 @@ The following were present in the local environment when this repo was assembled
 
 LM Studio was not installed in PATH at the time this repo was created, so the operational path in this repo is wired around Ollama.
 
+## Verified Example Output
+
+The repo includes a successful tiny LoRA training example:
+
+- base model: `sshleifer/tiny-gpt2`
+- training data: generated from local files in `samples/source/`
+- output directory: `artifacts/tiny-gpt2-lora/`
+- runtime: CPU-safe WSL example
+
+This is meant as a concrete LoRA example, not as the final production model you would serve through Codex.

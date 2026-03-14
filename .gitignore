@@ -5,8 +5,9 @@ __pycache__/
 
 # Training outputs
 artifacts/
+!artifacts/
+artifacts/**/checkpoint-*/
 
 # Editors and OS files
 .DS_Store
 Thumbs.db
-

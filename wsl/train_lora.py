@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
+import torch
 from datasets import load_dataset
 from peft import LoraConfig, get_peft_model
 from transformers import (
@@ -21,6 +22,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--valid-data", required=True, help="Path to valid.jsonl")
     parser.add_argument("--output-dir", required=True, help="Directory for LoRA artifacts")
     parser.add_argument("--max-length", type=int, default=1024)
+    parser.add_argument("--epochs", type=int, default=1)
     return parser.parse_args()
 
 
@@ -61,20 +63,31 @@ def main() -> None:
     tokenized = dataset.map(tokenize, batched=False)
 
     model = AutoModelForCausalLM.from_pretrained(args.model)
+    module_names = {name for name, _ in model.named_modules()}
+    if any(name.endswith("q_proj") for name in module_names):
+        target_modules = ["q_proj", "v_proj"]
+        fan_in_fan_out = False
+    elif any(name.endswith("c_attn") for name in module_names):
+        target_modules = ["c_attn"]
+        fan_in_fan_out = True
+    else:
+        target_modules = ["c_proj"]
+        fan_in_fan_out = False
+
     lora_config = LoraConfig(
         r=8,
         lora_alpha=16,
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM",
-        target_modules=["q_proj", "v_proj"],
+        target_modules=target_modules,
+        fan_in_fan_out=fan_in_fan_out,
     )
     model = get_peft_model(model, lora_config)
 
     training_args = TrainingArguments(
         output_dir=str(output_dir),
-        overwrite_output_dir=True,
-        num_train_epochs=1,
+        num_train_epochs=args.epochs,
         per_device_train_batch_size=1,
         per_device_eval_batch_size=1,
         gradient_accumulation_steps=4,
@@ -84,6 +97,10 @@ def main() -> None:
         eval_strategy="epoch",
         report_to="none",
         fp16=False,
+        bf16=False,
+        use_cpu=not torch.cuda.is_available(),
+        do_train=True,
+        do_eval=True,
     )
 
     trainer = Trainer(
@@ -101,4 +118,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
